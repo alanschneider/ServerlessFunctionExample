@@ -1,5 +1,6 @@
-# AzureFunctionExample
-Example of creating an Azure Function.
+# Serverless Function Example
+
+Currently, it only has an example of creating an Azure Function.
 
 **NOTE 1**: To deploy this example, you will need to rename some of the resources used in this example.
 
