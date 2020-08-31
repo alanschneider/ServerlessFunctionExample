@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_azfunc_name": {
+            "value": "GreeterApi"
+        },
+        "serverfarms_plan_name": {
+            "value": "WestUS2Plan"
+        },
+        "components_azfunc_name": {
+            "value": "GreeterApi"
+        },
+        "storageAccounts_azfunc_name": {
+            "value": "greeterapisa"
+        },
+        "actionGroups_Application_Insights_Smart_Detection_name": {
+            "value":  "Application Insights Smart Detection"
+        },
+        "smartdetectoralertrules_failure_anomalies___azfuncqstart_name": {
+            "value": "failure anomalies - azfuncqstart"
+        }
+    }
+}
