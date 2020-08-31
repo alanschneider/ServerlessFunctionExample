@@ -1,1 +1,1 @@
-call az group delete --name AzureFunctionExample-rg --yes
+call az group delete --name GreeterApi-rg --yes
