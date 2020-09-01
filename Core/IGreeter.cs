@@ -14,7 +14,7 @@ namespace Core
         /// Return back a canned response.
         /// </summary>
         /// <returns>A 200 OK with a canned message.</returns>
-        IActionResult ReturnCannedResponse();
+        string ReturnCannedResponse();
 
         /// <summary>
         /// Return a greeting to a person named in the request.
@@ -29,6 +29,6 @@ namespace Core
         /// 
         /// Otherwise, a greeting with the placeholder "Noname" will be returned.
         /// </returns>
-        Task<IActionResult> SayHello(HttpRequest req, ICollector<string> msg);
+        string SayHello(string name);
     }
 }

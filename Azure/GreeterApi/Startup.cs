@@ -14,7 +14,7 @@ namespace Azure.GreeterApi
         /// <inheritdoc/>
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IGreeter, Greeter>();
+            builder.Services.AddSingleton<IGreeter, GrumpyGreeter>();
         }
 
     }

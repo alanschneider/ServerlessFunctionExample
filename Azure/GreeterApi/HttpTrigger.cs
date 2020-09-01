@@ -5,6 +5,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Core;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Azure.GreeterApi
 {
@@ -32,28 +34,48 @@ namespace Azure.GreeterApi
 
             switch (req.Method)
             {
-                case "GET": return _greeter.ReturnCannedResponse();
-                case "POST": return await _greeter.SayHello(req, msg);
-                default:
-                    // CATCH ALL
-                    //
-                    // This code path shouldn't execute unless an HTTP
-                    // method is specified in the HttpTriggerAttribute, but
-                    // was unimplemented in the case statement above.
-                    //
-                    // Unspecified methods will be filtered out before
-                    // calling this method and will return a 404.
-                    //
-                    // Unimplemented methods will return a 405 below.
-                    //
-                    var response = new ObjectResult(new
-                    {
-                        statusCode = StatusCodes.Status405MethodNotAllowed,
-                        message = $"{req.Method} not implemented for this function"
-                    });
-                    response.StatusCode = StatusCodes.Status405MethodNotAllowed;
-                    return response;
+                case "GET": return HandleGet();
+                case "POST": return await HandlePost(req, msg);
+                default: return HandleUnimplemented(req.Method);
+
             }
+        }
+
+        private IActionResult HandleGet() => new OkObjectResult(_greeter.ReturnCannedResponse());
+
+        private async Task<IActionResult> HandlePost(HttpRequest req, ICollector<string> msg)
+        {
+            string name = req.Query["name"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            name = name ?? data?.name;
+
+            msg.Add(_greeter.SayHello(name));
+            return new OkObjectResult(_greeter.SayHello(name));
+        }
+
+
+        private IActionResult HandleUnimplemented(string method)
+        {
+            // CATCH ALL
+            //
+            // This code path shouldn't execute unless an HTTP
+            // method is specified in the HttpTriggerAttribute, but
+            // was unimplemented in the case statement above.
+            //
+            // Unspecified methods will be filtered out before
+            // calling this method and will return a 404.
+            //
+            // Unimplemented methods will return a 405 below.
+            //
+            var response = new ObjectResult(new
+            {
+                statusCode = StatusCodes.Status405MethodNotAllowed,
+                message = $"{method} not implemented for this function"
+            });
+            response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+            return response;
         }
     }
 }
